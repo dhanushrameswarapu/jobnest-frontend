@@ -1,3 +1,10 @@
+
+/* =========================================
+   JOBNEST BACKEND CONFIGURATION
+========================================= */
+
+const API_BASE_URL = "https://jobnest-backend-uqx6.onrender.com";
+
 /* =========================================================
    JOBNEST
    MAIN JAVASCRIPT
