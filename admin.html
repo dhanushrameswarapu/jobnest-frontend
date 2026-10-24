@@ -1319,60 +1319,47 @@ const ADMIN_PASSWORD =
    LOGIN
 ========================================================= */
 
-function adminLogin() {
+const API_BASE_URL = "https://jobnest-backend-uqx6.onrender.com";
 
-    const email =
-        document
-            .getElementById("adminEmail")
-            .value
-            .trim();
+async function adminLogin() {
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value;
+    const errorBox = document.getElementById("adminLoginError");
 
-    const password =
-        document
-            .getElementById("adminPassword")
-            .value;
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
 
+        const data = await response.json();
 
-    const error =
-        document.getElementById(
-            "loginError"
-        );
+        if (!response.ok) {
+            throw new Error(data.message || "Login failed.");
+        }
 
+        if (!data.user || data.user.role !== "admin") {
+            throw new Error("This account does not have administrator access.");
+        }
 
-    if (
-        email === ADMIN_EMAIL &&
-        password === ADMIN_PASSWORD
-    ) {
+        localStorage.setItem("jobnest_admin_token", data.token);
 
-        localStorage.setItem(
-            "jobnest_admin",
-            "true"
-        );
+        document.getElementById("adminLoginScreen").style.display = "none";
+        document.getElementById("adminApp").style.display = "flex";
 
+        await loadAdminData();
 
-        document
-            .getElementById(
-                "adminLoginScreen"
-            )
-            .style.display = "none";
-
-
-        document
-            .getElementById(
-                "adminApp"
-            )
-            .style.display = "flex";
-
-
-        loadAdminData();
-
-    } else {
-
-        error.style.display =
-            "block";
-
+    } catch (error) {
+        if (errorBox) {
+            errorBox.textContent = error.message;
+            errorBox.style.display = "block";
+        } else {
+            alert(error.message);
+        }
     }
-
 }
 
 
