@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>JobNest Admin Portal</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            background: #f4f7fb;
+        }
+
+        .admin-page {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: #061426;
+            color: white;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 800;
+            padding: 0 12px 30px;
+        }
+
+        .admin-logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: linear-gradient(135deg,#637dff,#3158ec);
+        }
+
+        .admin-nav button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 15px;
+            margin-bottom: 5px;
+            border: none;
+            border-radius: 8px;
+            color: #aebbd0;
+            background: transparent;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .admin-nav button:hover,
+        .admin-nav button.active {
+            color: white;
+            background: #142b48;
+        }
+
+        .admin-nav button i {
+            width: 20px;
+        }
+
+        .admin-main {
+            width: calc(100% - 250px);
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .admin-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-topbar h1 {
+            font-size: 27px;
+            color: #142945;
+        }
+
+        .admin-topbar p {
+            margin-top: 5px;
+            color: #8491a3;
+            font-size: 12px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #142945;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: linear-gradient(135deg,#607bff,#3658ed);
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .admin-stat {
+            background: white;
+            padding: 22px;
+            border-radius: 13px;
+            border: 1px solid #e4e9f0;
+        }
+
+        .admin-stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4264ed;
+            background: #edf1ff;
+            margin-bottom: 15px;
+        }
+
+        .admin-stat h3 {
+            font-size: 25px;
+            color: #142945;
+        }
+
+        .admin-stat p {
+            margin-top: 5px;
+            color: #8793a5;
+            font-size: 11px;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-panel {
+            background: white;
+            border: 1px solid #e4e9f0;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .admin-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-panel-header h2 {
+            font-size: 17px;
+            color: #142945;
+        }
+
+        .admin-btn {
+            border: none;
+            border-radius: 7px;
+            padding: 10px 15px;
+            color: white;
+            background: linear-gradient(135deg,#607bff,#3658ed);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .admin-btn.danger {
+            background: #e84a62;
+        }
+
+        .admin-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 12px;
+            background: #f6f8fc;
+            color: #65758c;
+            font-size: 10px;
+        }
+
+        .admin-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #edf0f4;
+            color: #43536a;
+            font-size: 11px;
+        }
+
+        .admin-table button {
+            border: none;
+            border-radius: 6px;
+            padding: 7px 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .delete-btn {
+            color: #d8344f;
+            background: #ffecef;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .status.active {
+            color: #138e59;
+            background: #e8f8f0;
+        }
+
+        .status.pending {
+            color: #b17a16;
+            background: #fff6dd;
+        }
+
+        .admin-form {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 15px;
+        }
+
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #4c5d73;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .admin-form-group input,
+        .admin-form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #dfe5ed;
+            border-radius: 7px;
+            outline: none;
+            font-size: 11px;
+        }
+
+        .admin-form-full {
+            grid-column: 1 / -1;
+        }
+
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(
+                    135deg,
+                    #061426,
+                    #102d50
+                );
+        }
+
+        .admin-login {
+            width: 90%;
+            max-width: 420px;
+            padding: 40px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.3);
+        }
+
+        .admin-login-logo {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(135deg,#607bff,#3658ed);
+            font-size: 20px;
+        }
+
+        .admin-login h1 {
+            margin-bottom: 8px;
+            font-size: 25px;
+        }
+
+        .admin-login p {
+            margin-bottom: 25px;
+            color: #8290a3;
+            font-size: 11px;
+        }
+
+        .admin-login input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 14px;
+            border: 1px solid #dfe5ed;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .admin-login button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: linear-gradient(135deg,#607bff,#3658ed);
+            font-weight: 700;
+        }
+
+        .login-error {
+            margin-bottom: 15px;
+            color: #d63d55;
+            font-size: 11px;
+            display: none;
+        }
+
+        @media(max-width:900px) {
+
+            .admin-sidebar {
+                width: 70px;
+            }
+
+            .admin-logo span,
+            .admin-nav button span {
+                display: none;
+            }
+
+            .admin-nav button {
+                justify-content: center;
+            }
+
+            .admin-main {
+                width: calc(100% - 70px);
+                margin-left: 70px;
+            }
+
+            .admin-stats {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+        }
+
+        @media(max-width:600px) {
+
+            .admin-main {
+                padding: 18px;
+            }
+
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-form {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-form-full {
+                grid-column: auto;
+            }
+
+        }
+
+    
+
+        .admin-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-right: 14px;
+            padding: 9px 13px;
+            border: 1px solid #dfe5ed;
+            border-radius: 8px;
+            background: white;
+            color: #4264ed;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.25s ease;
+        }
+
+        .admin-back-home:hover {
+            background: #edf1ff;
+            border-color: #bfcaff;
+            transform: translateY(-1px);
+        }
+
+        @media(max-width:600px) {
+            .admin-back-home {
+                font-size: 0;
+                width: 38px;
+                height: 38px;
+                justify-content: center;
+                margin-right: 8px;
+                padding: 0;
+            }
+
+            .admin-back-home i {
+                font-size: 13px;
+            }
+        }
+        /* =========================================
+   APPLICATION STATUS STYLES
+========================================= */
+
+.status.approved {
+    color: #138e59;
+    background: #e8f8f0;
+}
+
+.status.rejected {
+    color: #d8344f;
+    background: #ffecef;
+}
+
+.application-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.admin-table .approve-btn {
+    color: #138e59;
+    background: #e8f8f0;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.admin-table .approve-btn:hover {
+    color: white;
+    background: #138e59;
+}
+
+.admin-table .reject-btn {
+    color: #d8344f;
+    background: #ffecef;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.admin-table .reject-btn:hover {
+    color: white;
+    background: #d8344f;
+}
+
+.admin-table .reviewed-label {
+    color: #718096;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.admin-table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .application-actions {
+        min-width: 130px;
+    }
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ADMIN LOGIN
+===================================================== -->
+
+<div
+    class="login-screen"
+    id="adminLoginScreen">
+
+
+    <div class="admin-login">
+
+        <div class="admin-login-logo">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+
+        <h1>
+            JobNest Admin
+        </h1>
+
+
+        <p>
+            Login to manage the entire JobNest platform.
+        </p>
+
+
+        <div
+            class="login-error"
+            id="loginError">
+
+            Invalid administrator credentials.
+
+        </div>
+
+
+        <input
+            type="email"
+            id="adminEmail"
+            placeholder="Admin email">
+
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Admin password">
+
+
+        <button onclick="adminLogin()">
+
+            Login to Admin Portal
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ADMIN APPLICATION
+===================================================== -->
+
+<div
+    class="admin-page"
+    id="adminApp"
+    style="display:none;">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="admin-sidebar">
+
+
+        <div class="admin-logo">
+
+            <div class="admin-logo-icon">
+
+                <i class="fa-solid fa-briefcase"></i>
+
+            </div>
+
+            <span>
+                JobNest
+            </span>
+
+        </div>
+
+
+        <div class="admin-nav">
+
+            <button
+                class="active"
+                onclick="showAdminSection('dashboard',this)">
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </button>
+
+
+            <button
+                onclick="showAdminSection('jobs',this)">
+
+                <i class="fa-solid fa-briefcase"></i>
+
+                <span>
+                    Jobs
+                </span>
+
+            </button>
+
+
+            <button
+                onclick="showAdminSection('users',this)">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>
+                    Users
+                </span>
+
+            </button>
+
+
+            <button
+                onclick="showAdminSection('companies',this)">
+
+                <i class="fa-solid fa-building"></i>
+
+                <span>
+                    Companies
+                </span>
+
+            </button>
+
+
+            <button
+                onclick="showAdminSection('applications',this)">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <span>
+                    Applications
+                </span>
+
+            </button>
+
+
+            <button
+                onclick="showAdminSection('settings',this)">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>
+                    Settings
+                </span>
+
+            </button>
+
+
+            <button onclick="adminLogout()">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
+                    Logout
+                </span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="admin-main">
+
+
+        <div class="admin-topbar">
+
+            <div>
+
+                <h1>
+                    Admin Dashboard
+                </h1>
+
+                <p>
+                    Manage everything on JobNest.
+                </p>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <a
+                    href="index.html"
+                    class="admin-back-home"
+                    title="Back to JobNest website">
+
+                    <i class="fa-solid fa-house"></i>
+                    Back to Website
+
+                </a>
+
+                <div class="admin-avatar">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+                Administrator
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DASHBOARD -->
+
+        <section
+            class="admin-section active"
+            id="admin-dashboard">
+
+
+            <div class="admin-stats">
+
+
+                <div class="admin-stat">
+
+                    <div class="admin-stat-icon">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+
+                    <h3 id="totalJobs">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Jobs
+                    </p>
+
+                </div>
+
+
+                <div class="admin-stat">
+
+                    <div class="admin-stat-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <h3 id="totalUsers">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Users
+                    </p>
+
+                </div>
+
+
+                <div class="admin-stat">
+
+                    <div class="admin-stat-icon">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+
+                    <h3 id="totalCompanies">
+                        0
+                    </h3>
+
+                    <p>
+                        Companies
+                    </p>
+
+                </div>
+
+
+                <div class="admin-stat">
+
+                    <div class="admin-stat-icon">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+
+                    <h3 id="totalApplications">
+                        0
+                    </h3>
+
+                    <p>
+                        Applications
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="admin-btn"
+                    onclick="showAdminSectionById('jobs')">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add / Manage Jobs
+
+                </button>
+
+
+                <button
+                    class="admin-btn"
+                    onclick="showAdminSectionById('users')">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    Manage Users
+
+                </button>
+
+
+                <button
+                    class="admin-btn"
+                    onclick="showAdminSectionById('applications')">
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    View Applications
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- JOBS -->
+
+        <section
+            class="admin-section"
+            id="admin-jobs">
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        Add New Job
+                    </h2>
+
+                </div>
+
+
+                <form
+                    class="admin-form"
+                    onsubmit="addJob(event)">
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Company
+                        </label>
+
+                        <input
+                            type="text"
+                            id="jobCompany"
+                            required>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Job Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="jobTitle"
+                            required>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Location
+                        </label>
+
+                        <input
+                            type="text"
+                            id="jobLocation"
+                            required>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <select id="jobCategoryAdmin">
+
+                            <option value="technology">
+                                Technology
+                            </option>
+
+                            <option value="marketing">
+                                Marketing
+                            </option>
+
+                            <option value="design">
+                                Design
+                            </option>
+
+                            <option value="sales">
+                                Sales
+                            </option>
+
+                            <option value="finance">
+                                Finance
+                            </option>
+
+                            <option value="healthcare">
+                                Healthcare
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Salary
+                        </label>
+
+                        <input
+                            type="text"
+                            id="jobSalary"
+                            placeholder="₹5 LPA - ₹8 LPA"
+                            required>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Job Type
+                        </label>
+
+                        <select id="jobType">
+
+                            <option>
+                                Full Time
+                            </option>
+
+                            <option>
+                                Part Time
+                            </option>
+
+                            <option>
+                                Internship
+                            </option>
+
+                            <option>
+                                Contract
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Work Mode
+                        </label>
+
+                        <select id="jobMode">
+
+                            <option>
+                                Onsite
+                            </option>
+
+                            <option>
+                                Remote
+                            </option>
+
+                            <option>
+                                Hybrid
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Logo Letter
+                        </label>
+
+                        <input
+                            type="text"
+                            id="jobLogo"
+                            maxlength="4"
+                            placeholder="G">
+
+                    </div>
+
+
+                    <div class="admin-form-group admin-form-full">
+
+                        <button
+                            class="admin-btn"
+                            type="submit">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Add Job
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        All Jobs
+                    </h2>
+
+                </div>
+
+
+                <div
+                    class="admin-table-wrapper"
+                    id="jobsTable">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- USERS -->
+
+        <section
+            class="admin-section"
+            id="admin-users">
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        User Management
+                    </h2>
+
+                </div>
+
+
+                <div id="usersTable">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- COMPANIES -->
+
+        <section
+            class="admin-section"
+            id="admin-companies">
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        Company Management
+                    </h2>
+
+                    <button
+                        class="admin-btn"
+                        onclick="addCompany()">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Add Company
+
+                    </button>
+
+                </div>
+
+
+                <div id="companiesTable">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- APPLICATIONS -->
+
+        <section
+            class="admin-section"
+            id="admin-applications">
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        Job Applications
+                    </h2>
+
+                </div>
+
+
+                <div id="applicationsTable">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SETTINGS -->
+
+        <section
+            class="admin-section"
+            id="admin-settings">
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        Website Settings
+                    </h2>
+
+                </div>
+
+
+                <div class="admin-form">
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Website Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="siteName"
+                            value="JobNest">
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+                            Contact Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="siteEmail"
+                            value="admin@jobnest.com">
+
+                    </div>
+
+
+                    <div class="admin-form-group admin-form-full">
+
+                        <button
+                            class="admin-btn"
+                            onclick="saveSettings()">
+
+                            Save Settings
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <h2>
+                        Danger Zone
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="admin-btn danger"
+                    onclick="clearWebsiteData()">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    Reset Website Data
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+
+/* =========================================================
+   ADMIN CREDENTIALS
+========================================================= */
+
+const ADMIN_EMAIL =
+    "dhanushrameswarapu@gmail.com";
+
+const ADMIN_PASSWORD =
+    "Dhanush2008";
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function adminLogin() {
+
+    const email =
+        document
+            .getElementById("adminEmail")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("adminPassword")
+            .value;
+
+
+    const error =
+        document.getElementById(
+            "loginError"
+        );
+
+
+    if (
+        email === ADMIN_EMAIL &&
+        password === ADMIN_PASSWORD
+    ) {
+
+        localStorage.setItem(
+            "jobnest_admin",
+            "true"
+        );
+
+
+        document
+            .getElementById(
+                "adminLoginScreen"
+            )
+            .style.display = "none";
+
+
+        document
+            .getElementById(
+                "adminApp"
+            )
+            .style.display = "flex";
+
+
+        loadAdminData();
+
+    } else {
+
+        error.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function adminLogout() {
+
+    localStorage.removeItem(
+        "jobnest_admin"
+    );
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   SHOW SECTION
+========================================================= */
+
+function showAdminSection(
+    section,
+    button
+) {
+
+    document
+        .querySelectorAll(".admin-section")
+        .forEach(element => {
+
+            element.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .getElementById(
+            "admin-" + section
+        )
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(
+            ".admin-nav button"
+        )
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    loadAdminData();
+
+}
+
+
+/* =========================================================
+   QUICK SECTION
+========================================================= */
+
+function showAdminSectionById(
+    section
+) {
+
+    const button =
+        [...document.querySelectorAll(
+            ".admin-nav button"
+        )]
+        .find(btn =>
+            btn
+                .getAttribute("onclick")
+                ?.includes(
+                    "'" + section + "'"
+                )
+        );
+
+
+    showAdminSection(
+        section,
+        button
+    );
+
+}
+
+
+/* =========================================================
+   GET DATA
+========================================================= */
+
+function getData(
+    key,
+    fallback = []
+) {
+
+    return JSON.parse(
+        localStorage.getItem(key) ||
+        JSON.stringify(fallback)
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD DATA
+========================================================= */
+
+function loadAdminData() {
+
+    const jobs =
+        getData(
+            "jobnest_jobs"
+        );
+
+
+    const users =
+        getData(
+            "jobnest_users",
+            [
+                {
+                    id: 1,
+                    name: "Demo User",
+                    email: "user@example.com",
+                    role: "Job Seeker"
+                }
+            ]
+        );
+
+
+    const companies =
+        getData(
+            "jobnest_companies",
+            [
+                {
+                    id: 1,
+                    name: "Google",
+                    status: "Active"
+                },
+                {
+                    id: 2,
+                    name: "Amazon",
+                    status: "Active"
+                },
+                {
+                    id: 3,
+                    name: "Microsoft",
+                    status: "Active"
+                }
+            ]
+        );
+
+
+    const applications =
+        getData(
+            "jobnest_applications"
+        );
+
+
+    document.getElementById(
+        "totalJobs"
+    ).textContent =
+        jobs.length;
+
+
+    document.getElementById(
+        "totalUsers"
+    ).textContent =
+        users.length;
+
+
+    document.getElementById(
+        "totalCompanies"
+    ).textContent =
+        companies.length;
+
+
+    document.getElementById(
+        "totalApplications"
+    ).textContent =
+        applications.length;
+
+
+    renderJobs(jobs);
+
+    renderUsers(users);
+
+    renderCompanies(companies);
+
+    renderApplications(
+        applications
+    );
+
+}
+
+
+/* =========================================================
+   ADD JOB
+========================================================= */
+
+function addJob(event) {
+
+    event.preventDefault();
+
+
+    const jobs =
+        getData(
+            "jobnest_jobs"
+        );
+
+
+    const company =
+        document
+            .getElementById(
+                "jobCompany"
+            )
+            .value
+            .trim();
+
+
+    const title =
+        document
+            .getElementById(
+                "jobTitle"
+            )
+            .value
+            .trim();
+
+
+    const location =
+        document
+            .getElementById(
+                "jobLocation"
+            )
+            .value
+            .trim();
+
+
+    const category =
+        document
+            .getElementById(
+                "jobCategoryAdmin"
+            )
+            .value;
+
+
+    const salary =
+        document
+            .getElementById(
+                "jobSalary"
+            )
+            .value
+            .trim();
+
+
+    const type =
+        document
+            .getElementById(
+                "jobType"
+            )
+            .value;
+
+
+    const mode =
+        document
+            .getElementById(
+                "jobMode"
+            )
+            .value;
+
+
+    const logo =
+        document
+            .getElementById(
+                "jobLogo"
+            )
+            .value
+            .trim() ||
+        company.charAt(0);
+
+
+    jobs.push({
+
+        id: Date.now(),
+
+        company,
+
+        title,
+
+        location,
+
+        category,
+
+        salary,
+
+        type,
+
+        mode,
+
+        logo,
+
+        logoClass: ""
+
+    });
+
+
+    localStorage.setItem(
+        "jobnest_jobs",
+        JSON.stringify(jobs)
+    );
+
+
+    event.target.reset();
+
+
+    alert(
+        "Job added successfully!"
+    );
+
+
+    loadAdminData();
+
+}
+
+
+/* =========================================================
+   RENDER JOBS
+========================================================= */
+
+function renderJobs(jobs) {
+
+    const container =
+        document.getElementById(
+            "jobsTable"
+        );
+
+
+    if (jobs.length === 0) {
+
+        container.innerHTML =
+            "<p>No jobs found.</p>";
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Company</th>
+                    <th>Job</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${jobs.map(job => `
+
+                    <tr>
+
+                        <td>
+                            ${job.company}
+                        </td>
+
+                        <td>
+                            ${job.title}
+                        </td>
+
+                        <td>
+                            ${job.location}
+                        </td>
+
+                        <td>
+                            ${job.category}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteJob(${job.id})">
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DELETE JOB
+========================================================= */
+
+function deleteJob(id) {
+
+    if (
+        !confirm(
+            "Delete this job?"
+        )
+    ) return;
+
+
+    let jobs =
+        getData(
+            "jobnest_jobs"
+        );
+
+
+    jobs =
+        jobs.filter(
+            job => job.id !== id
+        );
+
+
+    localStorage.setItem(
+        "jobnest_jobs",
+        JSON.stringify(jobs)
+    );
+
+
+    loadAdminData();
+
+}
+
+
+/* =========================================================
+   USERS
+========================================================= */
+
+function renderUsers(users) {
+
+    const container =
+        document.getElementById(
+            "usersTable"
+        );
+
+
+    container.innerHTML = `
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${users.map(user => `
+
+                    <tr>
+
+                        <td>
+                            ${user.name}
+                        </td>
+
+                        <td>
+                            ${user.email}
+                        </td>
+
+                        <td>
+                            ${user.role}
+                        </td>
+
+                        <td>
+
+                            <span class="status active">
+                                Active
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteUser(${user.id})">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DELETE USER
+========================================================= */
+
+function deleteUser(id) {
+
+    if (
+        !confirm(
+            "Delete this user?"
+        )
+    ) return;
+
+
+    let users =
+        getData(
+            "jobnest_users"
+        );
+
+
+    users =
+        users.filter(
+            user => user.id !== id
+        );
+
+
+    localStorage.setItem(
+        "jobnest_users",
+        JSON.stringify(users)
+    );
+
+
+    loadAdminData();
+
+}
+
+
+/* =========================================================
+   COMPANIES
+========================================================= */
+
+function renderCompanies(
+    companies
+) {
+
+    const container =
+        document.getElementById(
+            "companiesTable"
+        );
+
+
+    container.innerHTML = `
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${companies.map(company => `
+
+                    <tr>
+
+                        <td>
+                            ${company.name}
+                        </td>
+
+                        <td>
+
+                            <span class="status active">
+                                ${company.status}
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteCompany(${company.id})">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ADD COMPANY
+========================================================= */
+
+function addCompany() {
+
+    const name =
+        prompt(
+            "Enter company name:"
+        );
+
+
+    if (!name) return;
+
+
+    const companies =
+        getData(
+            "jobnest_companies"
+        );
+
+
+    companies.push({
+
+        id: Date.now(),
+
+        name,
+
+        status: "Active"
+
+    });
+
+
+    localStorage.setItem(
+        "jobnest_companies",
+        JSON.stringify(companies)
+    );
+
+
+    loadAdminData();
+
+}
+
+
+/* =========================================================
+   DELETE COMPANY
+========================================================= */
+
+function deleteCompany(id) {
+
+    if (
+        !confirm(
+            "Delete this company?"
+        )
+    ) return;
+
+
+    let companies =
+        getData(
+            "jobnest_companies"
+        );
+
+
+    companies =
+        companies.filter(
+            company =>
+                company.id !== id
+        );
+
+
+    localStorage.setItem(
+        "jobnest_companies",
+        JSON.stringify(companies)
+    );
+
+
+    loadAdminData();
+
+}
+
+
+/* =========================================================
+   APPLICATIONS
+========================================================= */
+
+
+/* =========================================
+   APPLICATIONS TABLE
+========================================= */
+
+function renderApplications(applications) {
+    const container = document.getElementById("applicationsTable");
+
+    if (!container) {
+        console.error("Applications table container not found.");
+        return;
+    }
+
+    if (!Array.isArray(applications) || applications.length === 0) {
+        container.innerHTML = `
+            <p style="color:#8793a5;font-size:13px;">
+                No applications submitted yet.
+            </p>
+        `;
+        return;
+    }
+
+    function escapeApplicationHTML(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    container.innerHTML = `
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Applicant</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Job Title</th>
+                        <th>Applied Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${applications.map((app, index) => {
+                        const applicantName =
+                            app.applicantName || app.applicant || "N/A";
+
+                        const email = app.email || "N/A";
+                        const phone = app.phone || "N/A";
+
+                        const jobTitle =
+                            app.jobTitle || app.job || "N/A";
+
+                        const appliedDate =
+                            app.appliedAt || app.date || "N/A";
+
+                        const status = app.status || "Pending";
+
+                        const safeName =
+                            escapeApplicationHTML(applicantName);
+
+                        const safeEmail =
+                            escapeApplicationHTML(email);
+
+                        const safePhone =
+                            escapeApplicationHTML(phone);
+
+                        const safeJob =
+                            escapeApplicationHTML(jobTitle);
+
+                        const safeDate =
+                            escapeApplicationHTML(appliedDate);
+
+                        const safeStatus =
+                            escapeApplicationHTML(status);
+
+                        const statusClass =
+                            status.toLowerCase() === "approved"
+                                ? "approved"
+                                : status.toLowerCase() === "rejected"
+                                    ? "rejected"
+                                    : "pending";
+
+                        let actionHTML = "";
+
+                        if (status.toLowerCase() === "pending") {
+                            actionHTML = `
+                                <div class="application-actions">
+                                    <button
+                                        type="button"
+                                        class="approve-btn"
+                                        onclick="updateApplicationStatus(${index}, 'Approved')">
+                                        Approve
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="reject-btn"
+                                        onclick="updateApplicationStatus(${index}, 'Rejected')">
+                                        Reject
+                                    </button>
+                                </div>
+                            `;
+                        } else {
+                            actionHTML = `
+                                <span class="reviewed-label">
+                                    ${safeStatus}
+                                </span>
+                            `;
+                        }
+
+                        return `
+                            <tr>
+                                <td>${safeName}</td>
+                                <td>${safeEmail}</td>
+                                <td>${safePhone}</td>
+                                <td>${safeJob}</td>
+                                <td>${safeDate}</td>
+
+                                <td>
+                                    <span class="status ${statusClass}">
+                                        ${safeStatus}
+                                    </span>
+                                </td>
+
+                                <td>${actionHTML}</td>
+                            </tr>
+                        `;
+                    }).join("")}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+
+/* =========================================
+   APPROVE OR REJECT APPLICATION
+========================================= */
+
+async function updateApplicationStatus(index, newStatus) {
+    if (!["Approved", "Rejected"].includes(newStatus)) {
+        alert("Invalid application status.");
+        return;
+    }
+
+    const applications = JSON.parse(
+        localStorage.getItem("jobnest_applications") || "[]"
+    );
+
+    const application = applications[index];
+
+    if (!application) {
+        alert("Application not found. Please refresh the page.");
+        return;
+    }
+
+    if (application.status && application.status !== "Pending") {
+        alert("This application has already been reviewed.");
+        return;
+    }
+
+    // Send an email only when approving an application.
+    if (newStatus === "Approved") {
+        const applicantEmail = application.email;
+
+        if (!applicantEmail) {
+            alert("The applicant's email address is missing.");
+            return;
+        }
+
+        if (typeof emailjs === "undefined") {
+            alert("EmailJS did not load. Check your internet connection.");
+            return;
+        }
+
+        try {
+            const emailResponse = await emailjs.send(
+                "service_p2916uu",
+                "template_i12qcjp",
+                {
+                    to_email: applicantEmail,
+                    to_name:
+                        application.applicantName ||
+                        application.applicant ||
+                        "Applicant",
+                    job_title:
+                        application.jobTitle ||
+                        application.job ||
+                        "Applied Position",
+                    company: application.company || "JobNest"
+                },
+                {
+                    publicKey: "1Qdb0G3j8keaLcr9g"
+                }
+            );
+
+            console.log("Approval email sent:", emailResponse);
+
+        } catch (error) {
+            console.error("EmailJS error:", error);
+            alert(
+                "The approval email could not be sent. " +
+                "The application remains Pending. Please check your EmailJS settings."
+            );
+            return;
+        }
+    }
+
+    // Update status after a successful email, or immediately for rejection.
+    applications[index].status = newStatus;
+    applications[index].reviewedAt = new Date().toLocaleString();
+
+    localStorage.setItem(
+        "jobnest_applications",
+        JSON.stringify(applications)
+    );
+
+    if (typeof loadAdminData === "function") {
+        loadAdminData();
+    } else if (typeof renderApplications === "function") {
+        renderApplications(applications);
+    } else {
+        location.reload();
+    }
+
+    alert(
+        newStatus === "Approved"
+            ? "Application approved and email sent successfully!"
+            : "Application rejected."
+    );
+}
+/* =========================================================
+   CHECK LOGIN
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const loggedIn =
+            localStorage.getItem(
+                "jobnest_admin"
+            );
+
+
+        if (loggedIn === "true") {
+
+            document
+                .getElementById(
+                    "adminLoginScreen"
+                )
+                .style.display = "none";
+
+
+            document
+                .getElementById(
+                    "adminApp"
+                )
+                .style.display = "flex";
+
+
+            loadAdminData();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

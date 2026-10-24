@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>All Jobs | JobNest</title>
+
+    <!-- GOOGLE FONT -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: "Inter", sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f7ff,
+                    #eef2ff
+                );
+
+            color: #172033;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .jobs-navbar {
+
+            width: 100%;
+
+            height: 78px;
+
+            padding: 0 5%;
+
+            display: flex;
+
+            align-items: center;
+
+            background:
+                rgba(6, 20, 38, 0.98);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,0.12);
+
+        }
+
+
+        .jobs-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+        }
+
+
+        .jobs-logo-icon {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #637dff,
+                    #3158ec
+                );
+
+        }
+
+
+        .jobs-nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 30px;
+
+            margin-left: auto;
+
+        }
+
+
+        .jobs-nav-links a {
+
+            color: #aebbd0;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+
+        }
+
+
+        .jobs-nav-links a:hover {
+
+            color: white;
+
+        }
+
+
+        .jobs-admin-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 11px 16px;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #607bff,
+                    #3658ed
+                );
+
+            color: white !important;
+
+            text-decoration: none;
+
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header {
+
+            text-align: center;
+
+            padding: 70px 20px 45px;
+
+        }
+
+
+        .page-header .small-title {
+
+            color: #4968e9;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .page-header h1 {
+
+            font-size: 42px;
+
+            font-weight: 800;
+
+            color: #101a2e;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .page-header h1 span {
+
+            color: #4264ed;
+
+        }
+
+
+        .page-header p {
+
+            max-width: 650px;
+
+            margin: auto;
+
+            color: #667085;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           SEARCH AREA
+        ===================================================== */
+
+        .jobs-search-wrapper {
+
+            width: 90%;
+
+            max-width: 1150px;
+
+            margin: 0 auto 35px;
+
+        }
+
+
+        .jobs-search-box {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 10px;
+
+            background: white;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 12px 40px
+                rgba(34,52,100,0.12);
+
+            border:
+                1px solid #e5e9f5;
+
+        }
+
+
+        .jobs-search-input {
+
+            flex: 1;
+
+            height: 48px;
+
+            border: none;
+
+            outline: none;
+
+            padding: 0 15px;
+
+            font-size: 14px;
+
+            color: #1d2939;
+
+        }
+
+
+        .jobs-search-input::placeholder {
+
+            color: #98a2b3;
+
+        }
+
+
+        .jobs-search-button {
+
+            height: 48px;
+
+            padding: 0 25px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #607bff,
+                    #3658ed
+                );
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           JOB COUNT
+        ===================================================== */
+
+        .jobs-content {
+
+            width: 90%;
+
+            max-width: 1150px;
+
+            margin: auto;
+
+            padding-bottom: 70px;
+
+        }
+
+
+        .jobs-top {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .jobs-top h2 {
+
+            font-size: 20px;
+
+            color: #172033;
+
+        }
+
+
+        .jobs-count {
+
+            color: #667085;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           JOB GRID
+        ===================================================== */
+
+        .jobs-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+
+        }
+
+
+        /* =====================================================
+           JOB CARD
+        ===================================================== */
+
+        .job-card {
+
+            background: white;
+
+            border: 1px solid #e5e9f5;
+
+            border-radius: 15px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 8px 28px
+                rgba(34,52,100,0.07);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .job-card:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 16px 35px
+                rgba(34,52,100,0.13);
+
+        }
+
+
+        .job-card-top {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .company-logo {
+
+            width: 52px;
+
+            height: 52px;
+
+            min-width: 52px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #607bff,
+                    #3658ed
+                );
+
+        }
+
+
+        .job-main {
+
+            flex: 1;
+
+        }
+
+
+        .job-title {
+
+            font-size: 17px;
+
+            font-weight: 800;
+
+            color: #172033;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .company-name {
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #667085;
+
+        }
+
+
+        .job-description {
+
+            color: #667085;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .job-details {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .job-detail {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 7px 10px;
+
+            border-radius: 7px;
+
+            background: #f4f6fb;
+
+            color: #596579;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+        }
+
+
+        .job-detail i {
+
+            color: #4264ed;
+
+        }
+
+
+        .job-footer {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            padding-top: 17px;
+
+            border-top: 1px solid #edf0f6;
+
+        }
+
+
+        .salary {
+
+            color: #172033;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+        }
+
+
+        .job-type {
+
+            color: #4264ed;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .apply-btn {
+
+            border: none;
+
+            padding: 10px 17px;
+
+            border-radius: 8px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #607bff,
+                    #3658ed
+                );
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+
+        }
+
+
+        .apply-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 18px
+                rgba(66,100,237,0.25);
+
+        }
+
+
+        /* =====================================================
+           NO JOBS
+        ===================================================== */
+
+        .no-jobs {
+
+            padding: 70px 20px;
+
+            text-align: center;
+
+            background: white;
+
+            border-radius: 15px;
+
+            border: 1px solid #e5e9f5;
+
+        }
+
+
+        .no-jobs i {
+
+            font-size: 45px;
+
+            color: #aab5cc;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .no-jobs h3 {
+
+            font-size: 20px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .no-jobs p {
+
+            color: #667085;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .jobs-footer {
+
+            padding: 25px;
+
+            text-align: center;
+
+            color: #98a2b3;
+
+            font-size: 12px;
+
+            border-top: 1px solid #e5e9f5;
+
+            background: white;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .jobs-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .jobs-nav-links a:not(.jobs-admin-btn) {
+
+                display: none;
+
+            }
+
+            .page-header h1 {
+
+                font-size: 34px;
+
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .jobs-navbar {
+
+                padding: 0 18px;
+
+            }
+
+            .jobs-nav-links {
+
+                gap: 8px;
+
+            }
+
+            .page-header {
+
+                padding-top: 50px;
+
+            }
+
+            .page-header h1 {
+
+                font-size: 29px;
+
+            }
+
+            .jobs-search-box {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+            .jobs-search-button {
+
+                width: 100%;
+
+            }
+
+            .jobs-top {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 5px;
+
+            }
+
+            .job-footer {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+            .apply-btn {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+
+    <header class="jobs-navbar">
+
+        <a href="index.html" class="jobs-logo">
+
+            <div class="jobs-logo-icon">
+
+                <i class="fa-solid fa-briefcase"></i>
+
+            </div>
+
+            <span>JobNest</span>
+
+        </a>
+
+
+        <nav class="jobs-nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="index.html#jobs">
+                Jobs
+            </a>
+
+            <a href="index.html#companies">
+                Companies
+            </a>
+
+            <a href="index.html#about">
+                About
+            </a>
+
+            <a href="index.html#contact">
+                Contact
+            </a>
+
+            <a href="admin.html" class="jobs-admin-btn">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                Admin
+
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ===================================================== -->
+
+    <section class="page-header">
+
+        <div class="small-title">
+            JOBNEST OPPORTUNITIES
+        </div>
+
+        <h1>
+            Find Your <span>Dream Job</span>
+        </h1>
+
+        <p>
+            Explore all available opportunities from top companies
+            and find the right job for your skills and career goals.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SEARCH
+    ===================================================== -->
+
+    <section class="jobs-search-wrapper">
+
+        <div class="jobs-search-box">
+
+            <input
+                type="text"
+                id="jobSearchInput"
+                class="jobs-search-input"
+                placeholder="Search jobs, companies, skills or locations..."
+                autocomplete="off">
+
+            <button
+                class="jobs-search-button"
+                onclick="filterJobs()">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Search Jobs
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         JOBS
+    ===================================================== -->
+
+    <main class="jobs-content">
+
+        <div class="jobs-top">
+
+            <h2>
+                All Available Jobs
+            </h2>
+
+            <span
+                class="jobs-count"
+                id="jobsCount">
+
+                0 jobs
+
+            </span>
+
+        </div>
+
+
+        <div
+            class="jobs-grid"
+            id="allJobsContainer">
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+    <footer class="jobs-footer">
+
+        © 2026 JobNest. All rights reserved.
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ===================================================== -->
+
+    <script>
+
+        /* =====================================================
+           DEFAULT JOBS
+        ===================================================== */
+
+        const defaultJobs = [
+
+            {
+                id: 1,
+                title: "Software Engineer",
+                company: "Google",
+                location: "Bengaluru",
+                category: "Software Engineering",
+                salary: "₹12 - ₹20 LPA",
+                type: "Full-time",
+                experience: "0-2 years",
+                description:
+                    "Build scalable products and solve challenging engineering problems with a world-class engineering team."
+            },
+
+
+            {
+                id: 2,
+                title: "Frontend Developer",
+                company: "Amazon",
+                location: "Hyderabad",
+                category: "Frontend Development",
+                salary: "₹8 - ₹15 LPA",
+                type: "Full-time",
+                experience: "1-3 years",
+                description:
+                    "Create responsive and user-friendly interfaces for products used by millions of customers."
+            },
+
+
+            {
+                id: 3,
+                title: "Data Analyst",
+                company: "Microsoft",
+                location: "Bengaluru",
+                category: "Data Analytics",
+                salary: "₹7 - ₹13 LPA",
+                type: "Full-time",
+                experience: "0-2 years",
+                description:
+                    "Analyze business data and create meaningful insights that help teams make better decisions."
+            },
+
+
+            {
+                id: 4,
+                title: "System Engineer",
+                company: "TCS",
+                location: "Chennai",
+                category: "IT & Systems",
+                salary: "₹4 - ₹8 LPA",
+                type: "Full-time",
+                experience: "0-2 years",
+                description:
+                    "Work on enterprise technology solutions and support large-scale IT systems."
+            }
+
+        ];
+
+
+        /* =====================================================
+           GET JOBS
+        ===================================================== */
+
+        function getJobs() {
+
+            const savedJobs =
+                localStorage.getItem("jobnest_jobs");
+
+            if (savedJobs) {
+
+                try {
+
+                    return JSON.parse(savedJobs);
+
+                } catch (error) {
+
+                    console.error(
+                        "Error reading saved jobs:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            localStorage.setItem(
+                "jobnest_jobs",
+                JSON.stringify(defaultJobs)
+            );
+
+
+            return defaultJobs;
+
+        }
+
+
+
+        /* =====================================================
+           DISPLAY ALL JOBS
+        ===================================================== */
+
+        function displayAllJobs(jobs) {
+
+            const container =
+                document.getElementById(
+                    "allJobsContainer"
+                );
+
+
+            const count =
+                document.getElementById(
+                    "jobsCount"
+                );
+
+
+            count.textContent =
+                `${jobs.length} ${jobs.length === 1 ? "job" : "jobs"}`;
+
+
+            if (!jobs.length) {
+
+                container.innerHTML = `
+
+                    <div class="no-jobs">
+
+                        <i class="fa-solid fa-briefcase"></i>
+
+                        <h3>
+                            No Jobs Found
+                        </h3>
+
+                        <p>
+                            Try searching with a different
+                            job title, company or location.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML = jobs.map(job => `
+
+                <article class="job-card">
+
+                    <div class="job-card-top">
+
+                        <div class="company-logo">
+
+                            ${getCompanyInitial(job.company)}
+
+                        </div>
+
+
+                        <div class="job-main">
+
+                            <div class="job-title">
+
+                                ${escapeHTML(job.title)}
+
+                            </div>
+
+                            <div class="company-name">
+
+                                ${escapeHTML(job.company)}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <p class="job-description">
+
+                        ${escapeHTML(
+                            job.description ||
+                            "Explore this exciting opportunity and take the next step in your career."
+                        )}
+
+                    </p>
+
+
+                    <div class="job-details">
+
+                        <span class="job-detail">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            ${escapeHTML(
+                                job.location || "Not specified"
+                            )}
+
+                        </span>
+
+
+                        <span class="job-detail">
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                            ${escapeHTML(
+                                job.category || "General"
+                            )}
+
+                        </span>
+
+
+                        <span class="job-detail">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            ${escapeHTML(
+                                job.experience || "Any experience"
+                            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="job-footer">
+
+                        <div>
+
+                            <div class="salary">
+
+                                ${escapeHTML(
+                                    job.salary || "Salary not disclosed"
+                                )}
+
+                            </div>
+
+                            <div class="job-type">
+
+                                ${escapeHTML(
+                                    job.type || "Full-time"
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                       <button
+                            class="apply-btn"
+                            onclick="applyForJob(${job.id})">
+                            Apply Now
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `).join("");
+
+        }
+
+
+
+        /* =====================================================
+           SEARCH JOBS
+        ===================================================== */
+
+        function filterJobs() {
+
+            const input =
+                document.getElementById(
+                    "jobSearchInput"
+                );
+
+
+            const searchText =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const jobs = getJobs();
+
+
+            if (!searchText) {
+
+                displayAllJobs(jobs);
+
+                return;
+
+            }
+
+
+            const filteredJobs =
+                jobs.filter(job => {
+
+                    return (
+
+                        String(job.title || "")
+                            .toLowerCase()
+                            .includes(searchText)
+
+                        ||
+
+                        String(job.company || "")
+                            .toLowerCase()
+                            .includes(searchText)
+
+                        ||
+
+                        String(job.location || "")
+                            .toLowerCase()
+                            .includes(searchText)
+
+                        ||
+
+                        String(job.category || "")
+                            .toLowerCase()
+                            .includes(searchText)
+
+                        ||
+
+                        String(job.description || "")
+                            .toLowerCase()
+                            .includes(searchText)
+
+                    );
+
+                });
+
+
+            displayAllJobs(filteredJobs);
+
+        }
+
+
+
+        /* =====================================================
+           APPLY
+        ===================================================== */
+
+        function applyForJob(jobId) {
+    const jobs = getJobs();
+
+    const selectedJob = jobs.find(job => String(job.id) === String(jobId));
+
+    if (!selectedJob) {
+        alert("Job not found.");
+        return;
+    }
+
+    // Save selected job for the application page
+    localStorage.setItem("selected_job", JSON.stringify(selectedJob));
+
+    // Open registration/application page
+    window.location.href = "registration.html";
+}
+
+
+
+        /* =====================================================
+           COMPANY INITIAL
+        ===================================================== */
+
+        function getCompanyInitial(company) {
+
+            if (!company) {
+
+                return "J";
+
+            }
+
+
+            return company
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+
+        /* =====================================================
+           SECURITY
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+
+        /* =====================================================
+           ENTER KEY SEARCH
+        ===================================================== */
+
+        document
+            .getElementById("jobSearchInput")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        filterJobs();
+
+                    }
+
+                }
+            );
+
+
+
+        /* =====================================================
+           INITIAL LOAD
+        ===================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                displayAllJobs(
+                    getJobs()
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JobNest | Find Your Dream Job</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+<!-- =====================================================
+     JOBNEST NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <!-- LOGO -->
+    <a href="#home" class="logo">
+
+        <div class="logo-icon">
+            <i class="fa-solid fa-briefcase"></i>
+        </div>
+
+        <span>JobNest</span>
+
+    </a>
+
+
+    <!-- MAIN NAVIGATION -->
+    <nav class="main-nav">
+
+        <a href="#home" class="active">
+            Home
+        </a>
+
+        <a href="#jobs">
+            Jobs
+        </a>
+
+        <a href="#companies">
+            Companies
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+    </nav>
+
+
+    <!-- RIGHT SIDE BUTTONS -->
+    <!-- =====================================================
+     RIGHT SIDE BUTTONS
+===================================================== -->
+
+<div class="nav-actions">
+
+    <!-- SEARCH -->
+
+    <button
+        class="search-icon"
+        onclick="focusSearch()"
+        aria-label="Search">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+    </button>
+
+
+    <!-- ADMIN PORTAL -->
+
+    <a
+        href="admin.html"
+        class="admin-nav-btn"
+        title="Open JobNest Admin Portal">
+
+        <i class="fa-solid fa-user-shield"></i>
+
+        <span>Admin Portal</span>
+
+    </a>
+
+
+    <!-- LOGIN -->
+
+    <button
+        class="login-btn"
+        id="loginNavBtn"
+        onclick="openLogin()">
+
+        Login
+
+    </button>
+
+
+    <!-- SIGN UP -->
+
+    <button
+        class="signup-btn"
+        id="signupNavBtn"
+        onclick="openSignup()">
+
+        Sign Up
+
+    </button>
+
+
+    <!-- ACCOUNT -->
+
+    <button
+        class="account-btn"
+        id="accountNavBtn"
+        onclick="openAccount()"
+        style="display: none;">
+
+        <i class="fa-solid fa-user"></i>
+
+        <span id="accountNavName">
+            Account
+        </span>
+
+    </button>
+
+</div>
+
+</header>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="home">
+
+    <div class="hero-overlay"></div>
+
+
+    <div class="hero-content">
+
+        <p class="hero-small">
+            YOUR NEXT OPPORTUNITY AWAITS
+        </p>
+
+
+        <h1>
+
+            Find Your
+            <span>Dream Job</span>
+
+            <br>
+
+            <strong>Build Your Future</strong>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Connect with top companies, explore exciting
+            opportunities and take the next step in your
+            career journey.
+
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <div class="job-search" id="jobSearch">
+
+            <!-- KEYWORD -->
+
+            <div class="search-field">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="jobKeyword"
+                    placeholder="Job title, skills, or company"
+                    autocomplete="off">
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="search-field location-field">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <input
+                    type="text"
+                    id="locationInput"
+                    placeholder="Location"
+                    autocomplete="off">
+
+                <div
+                    id="locationSuggestions"
+                    class="location-suggestions">
+                </div>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div class="search-field category">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <select id="jobCategory">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    <option value="technology">
+                        Technology
+                    </option>
+
+                    <option value="marketing">
+                        Marketing
+                    </option>
+
+                    <option value="design">
+                        Design
+                    </option>
+
+                    <option value="sales">
+                        Sales
+                    </option>
+
+                    <option value="finance">
+                        Finance
+                    </option>
+
+                    <option value="healthcare">
+                        Healthcare
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ONLY ONE SEARCH BUTTON -->
+
+            <button
+                type="button"
+                class="search-btn"
+                onclick="searchJobs()">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Search
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     USER TYPES
+===================================================== -->
+
+<section class="user-types">
+
+
+    <div class="user-card">
+
+        <div class="user-icon">
+
+            <i class="fa-solid fa-user-graduate"></i>
+
+        </div>
+
+        <h3>For Students</h3>
+
+        <p>
+            Find the right opportunities,
+            apply and grow your career.
+        </p>
+
+        <a href="#jobs">
+            Explore Jobs
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+    </div>
+
+
+
+    <div class="user-card">
+
+        <div class="user-icon">
+
+            <i class="fa-solid fa-user-tie"></i>
+
+        </div>
+
+        <h3>For Recruiters</h3>
+
+        <p>
+            Post jobs, find the best talent
+            and build your team.
+        </p>
+
+        <a href="#jobs">
+            Hire Talent
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+    </div>
+
+
+
+    <div class="user-card">
+
+        <div class="user-icon">
+
+            <i class="fa-solid fa-building"></i>
+
+        </div>
+
+        <h3>For Companies</h3>
+
+        <p>
+            Showcase your brand, attract
+            and hire top talent.
+        </p>
+
+        <a href="#companies">
+            Get Started
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+    </div>
+
+
+
+    <!-- ADMIN -->
+
+    <div class="user-card admin-card">
+
+        <div class="user-icon">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+        <h3>For Admins</h3>
+
+        <p>
+            Manage users, jobs, companies
+            and applications.
+        </p>
+
+        <a href="admin.html">
+
+            Admin Portal
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURED JOBS
+===================================================== -->
+
+<section class="jobs-section" id="jobs">
+
+
+    <div class="section-heading">
+
+        <div>
+
+            <p class="section-label">
+                FEATURED JOBS
+            </p>
+
+            <h2>
+                Latest Job Openings
+            </h2>
+
+            <p>
+                Explore some of the latest opportunities
+                from leading companies.
+            </p>
+
+        </div>
+
+
+        <button 
+    class="view-link" 
+    onclick="showAllJobs()"> 
+
+    View All Jobs 
+
+    <i class="fa-solid fa-arrow-right"></i> 
+
+        </button>   
+    </div>
+
+
+
+    <div
+        class="jobs-grid"
+        id="featuredJobs">
+
+        <!-- Jobs generated by JavaScript -->
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
+
+<section
+    class="categories-section"
+    id="companies">
+
+
+    <div class="section-heading">
+
+        <div>
+
+            <p class="section-label">
+                POPULAR CATEGORIES
+            </p>
+
+            <h2>
+                Explore Jobs by Category
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="categories-grid">
+
+
+        <div
+            class="category-card"
+            onclick="searchCategory('technology')">
+
+            <div class="category-icon technology">
+
+                <i class="fa-solid fa-code"></i>
+
+            </div>
+
+            <div>
+
+                <h4>Technology</h4>
+
+                <p>1,250+ jobs</p>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="category-card"
+            onclick="searchCategory('marketing')">
+
+            <div class="category-icon marketing">
+
+                <i class="fa-solid fa-bullhorn"></i>
+
+            </div>
+
+            <div>
+
+                <h4>Marketing</h4>
+
+                <p>650+ jobs</p>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="category-card"
+            onclick="searchCategory('design')">
+
+            <div class="category-icon design">
+
+                <i class="fa-solid fa-palette"></i>
+
+            </div>
+
+            <div>
+
+                <h4>Design</h4>
+
+                <p>420+ jobs</p>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="category-card"
+            onclick="searchCategory('sales')">
+
+            <div class="category-icon sales">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+            <div>
+
+                <h4>Sales</h4>
+
+                <p>530+ jobs</p>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="category-card"
+            onclick="searchCategory('finance')">
+
+            <div class="category-icon finance">
+
+                <i class="fa-solid fa-coins"></i>
+
+            </div>
+
+            <div>
+
+                <h4>Finance</h4>
+
+                <p>380+ jobs</p>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="category-card"
+            onclick="searchCategory('healthcare')">
+
+            <div class="category-icon healthcare">
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+            </div>
+
+            <div>
+
+                <h4>Healthcare</h4>
+
+                <p>290+ jobs</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="how-section" id="about">
+
+
+    <div class="how-intro">
+
+        <p class="section-label">
+            SIMPLE PROCESS
+        </p>
+
+        <h2>
+            How JobNest Works
+        </h2>
+
+        <p>
+            Find your next opportunity in
+            four simple steps.
+        </p>
+
+    </div>
+
+
+    <div class="steps-grid">
+
+
+        <div class="step">
+
+            <div class="step-number">
+                01
+            </div>
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            <h3>
+                Create Account
+            </h3>
+
+            <p>
+                Create your JobNest account
+                and complete your profile.
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-number">
+                02
+            </div>
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <h3>
+                Search Jobs
+            </h3>
+
+            <p>
+                Search thousands of jobs
+                using keywords and locations.
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-number">
+                03
+            </div>
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+            <h3>
+                Apply
+            </h3>
+
+            <p>
+                Apply to jobs that match
+                your skills and interests.
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-number">
+                04
+            </div>
+
+            <i class="fa-solid fa-briefcase"></i>
+
+            <h3>
+                Get Hired
+            </h3>
+
+            <p>
+                Connect with employers
+                and start your career.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TESTIMONIALS
+===================================================== -->
+
+<section class="testimonial-section">
+
+
+    <div class="section-heading">
+
+        <div>
+
+            <p class="section-label">
+                SUCCESS STORIES
+            </p>
+
+            <h2>
+                What Our Users Say
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="testimonial-grid">
+
+
+        <div class="testimonial-card">
+
+            <p>
+                "JobNest made my job search simple.
+                I found several opportunities matching
+                my skills."
+            </p>
+
+            <div class="testimonial-user">
+
+                <img
+                    src="https://randomuser.me/api/portraits/men/32.jpg"
+                    alt="Rahul">
+
+                <div>
+
+                    <h4>
+                        Rahul Sharma
+                    </h4>
+
+                    <span>
+                        Software Engineer
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="testimonial-card">
+
+            <p>
+                "The search system is easy to use
+                and helped me discover companies
+                I had not considered before."
+            </p>
+
+            <div class="testimonial-user">
+
+                <img
+                    src="https://randomuser.me/api/portraits/women/44.jpg"
+                    alt="Priya">
+
+                <div>
+
+                    <h4>
+                        Priya Nair
+                    </h4>
+
+                    <span>
+                        Data Analyst
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="testimonial-card">
+
+            <p>
+                "As a recruiter, JobNest gives us
+                a simple way to reach talented
+                candidates."
+            </p>
+
+            <div class="testimonial-user">
+
+                <img
+                    src="https://randomuser.me/api/portraits/women/68.jpg"
+                    alt="Ananya">
+
+                <div>
+
+                    <h4>
+                        Ananya Reddy
+                    </h4>
+
+                    <span>
+                        HR Manager
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer" id="contact">
+
+
+    <div class="footer-content">
+
+
+        <div class="footer-brand">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+
+                    <i class="fa-solid fa-briefcase"></i>
+
+                </div>
+
+                <span>JobNest</span>
+
+            </div>
+
+            <p>
+                Connecting talented people with
+                companies and opportunities.
+            </p>
+
+        </div>
+
+
+
+        <div class="footer-column">
+
+            <h4>For Job Seekers</h4>
+
+            <a href="#jobs">
+                Search Jobs
+            </a>
+
+            <a href="#jobs">
+                Featured Jobs
+            </a>
+
+            <a href="#home">
+                Create Profile
+            </a>
+
+        </div>
+
+
+
+        <div class="footer-column">
+
+            <h4>For Employers</h4>
+
+            <a href="#companies">
+                Post a Job
+            </a>
+
+            <a href="#companies">
+                Find Candidates
+            </a>
+
+            <a href="#companies">
+                Companies
+            </a>
+
+        </div>
+
+
+
+        <div class="footer-column">
+
+            <h4>Platform</h4>
+
+            <a href="#about">
+                About Us
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
+
+            <a href="admin.html">
+                Admin Portal
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 JobNest.
+        All Rights Reserved.
+
+    </div>
+
+</footer>
+
+<!-- =====================================================
+     AUTH MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="authModal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            onclick="closeModal()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="modal-logo">
+
+            <i class="fa-solid fa-briefcase"></i>
+
+        </div>
+
+
+        <h2 id="authTitle">
+            Welcome to JobNest
+        </h2>
+
+
+        <p id="authSubtitle">
+            Login to continue
+        </p>
+
+
+        <form
+            id="authForm"
+            onsubmit="handleAuth(event)">
+
+
+            <!-- NAME -->
+
+            <div
+                class="form-group"
+                id="nameField"
+                style="display: none;">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="authName"
+                    placeholder="Enter your full name">
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="authEmail"
+                    placeholder="Enter your email"
+                    required>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="authPassword"
+                    placeholder="Enter your password"
+                    required>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="form-submit"
+                id="authSubmit">
+
+                Login
+
+            </button>
+
+        </form>
+
+
+        <p class="auth-switch">
+
+            <span id="authSwitchText">
+                Don't have an account?
+            </span>
+
+            <button
+                onclick="toggleAuthMode()"
+                id="authSwitchButton">
+
+                Sign Up
+
+            </button>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ACCOUNT MODAL
+===================================================== -->
+
+<div class="account-modal" id="accountModal">
+
+    <div class="account-modal-content">
+
+        <button class="account-close" onclick="closeAccount()" aria-label="Close account">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="account-avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <h2>My Account</h2>
+
+        <p class="account-subtitle">
+            Your JobNest profile
+        </p>
+
+        <div class="account-details">
+
+            <div class="account-detail">
+                <div class="account-detail-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                    <span>Full Name</span>
+                    <strong id="accountName">User</strong>
+                </div>
+            </div>
+
+            <div class="account-detail">
+                <div class="account-detail-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div>
+                    <span>Email</span>
+                    <strong id="accountEmail">user@example.com</strong>
+                </div>
+            </div>
+
+            <div class="account-detail">
+                <div class="account-detail-icon">
+                    <i class="fa-solid fa-user-tag"></i>
+                </div>
+                <div>
+                    <span>Account Type</span>
+                    <strong>Job Seeker</strong>
+                </div>
+            </div>
+
+            <div class="account-detail">
+                <div class="account-detail-icon">
+                    <i class="fa-solid fa-calendar"></i>
+                </div>
+                <div>
+                    <span>Member Since</span>
+                    <strong id="accountDate">-</strong>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="logout-btn" onclick="logoutUser()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
