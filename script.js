@@ -582,577 +582,299 @@ function applyJob(jobTitle) {
 }
 
 
+
 /* =========================================================
-   USER AUTHENTICATION
+   USER AUTHENTICATION — BACKEND CONNECTED
 ========================================================= */
 
 let authMode = "login";
 
+const AUTH_TOKEN_KEY = "jobnest_token";
+const AUTH_USER_KEY = "jobnest_current_user";
 
 /* =========================================================
-   GET USERS
+   API REQUEST HELPER
 ========================================================= */
 
-function getUsers() {
+async function apiRequest(endpoint, options = {}) {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
 
-    try {
+    const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+    };
 
-        return JSON.parse(
-            localStorage.getItem(
-                "jobnest_users"
-            ) || "[]"
-        );
-
-    } catch (error) {
-
-        return [];
-
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
     }
 
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        throw new Error(data.message || "Something went wrong. Please try again.");
+    }
+
+    return data;
 }
-
-
-/* =========================================================
-   SAVE USERS
-========================================================= */
-
-function saveUsers(users) {
-
-    localStorage.setItem(
-        "jobnest_users",
-        JSON.stringify(users)
-    );
-
-}
-
 
 /* =========================================================
    GET CURRENT USER
 ========================================================= */
 
 function getCurrentUser() {
-
-    const storedUser =
-        localStorage.getItem(
-            "jobnest_current_user"
-        );
-
-
-    if (!storedUser) {
-
-        return null;
-
-    }
-
-
     try {
-
-        return JSON.parse(
-            storedUser
-        );
-
-    } catch (error) {
-
-        localStorage.removeItem(
-            "jobnest_current_user"
-        );
-
+        return JSON.parse(localStorage.getItem(AUTH_USER_KEY) || "null");
+    } catch {
         return null;
-
     }
-
 }
-
 
 /* =========================================================
    OPEN LOGIN
 ========================================================= */
 
 function openLogin() {
-
-    authMode =
-        "login";
-
-
+    authMode = "login";
     updateAuthModal();
 
-
-    const modal =
-        document.getElementById(
-            "authModal"
-        );
-
-
-    if (modal) {
-
-        modal.classList.add(
-            "show"
-        );
-
-    }
-
+    document.getElementById("authModal")?.classList.add("show");
 }
-
 
 /* =========================================================
    OPEN SIGN UP
 ========================================================= */
 
 function openSignup() {
-
-    /*
-       If user is already logged in,
-       open Account instead.
-    */
-
     if (getCurrentUser()) {
-
         openAccount();
-
         return;
-
     }
 
-
-    authMode =
-        "signup";
-
-
+    authMode = "signup";
     updateAuthModal();
 
-
-    const modal =
-        document.getElementById(
-            "authModal"
-        );
-
-
-    if (modal) {
-
-        modal.classList.add(
-            "show"
-        );
-
-    }
-
+    document.getElementById("authModal")?.classList.add("show");
 }
 
-
 /* =========================================================
-   CLOSE AUTH MODAL
+   CLOSE LOGIN / SIGNUP MODAL
 ========================================================= */
 
 function closeModal() {
-
-    const modal =
-        document.getElementById(
-            "authModal"
-        );
-
-
-    if (modal) {
-
-        modal.classList.remove(
-            "show"
-        );
-
-    }
-
+    document.getElementById("authModal")?.classList.remove("show");
 }
 
-
 /* =========================================================
-   SWITCH LOGIN / SIGN UP
+   SWITCH LOGIN / SIGNUP
 ========================================================= */
 
 function toggleAuthMode() {
-
-    authMode =
-        authMode === "login"
-            ? "signup"
-            : "login";
-
-
+    authMode = authMode === "login" ? "signup" : "login";
     updateAuthModal();
-
 }
-
 
 /* =========================================================
    UPDATE AUTH MODAL
 ========================================================= */
 
 function updateAuthModal() {
+    const title = document.getElementById("authTitle");
+    const subtitle = document.getElementById("authSubtitle");
+    const submit = document.getElementById("authSubmit");
+    const switchText = document.getElementById("authSwitchText");
+    const switchButton = document.getElementById("authSwitchButton");
+    const nameField = document.getElementById("nameField");
+    const nameInput = document.getElementById("authName");
+    const passwordInput = document.getElementById("authPassword");
 
-    const title =
-        document.getElementById(
-            "authTitle"
-        );
-
-    const subtitle =
-        document.getElementById(
-            "authSubtitle"
-        );
-
-    const submit =
-        document.getElementById(
-            "authSubmit"
-        );
-
-    const switchText =
-        document.getElementById(
-            "authSwitchText"
-        );
-
-    const switchButton =
-        document.getElementById(
-            "authSwitchButton"
-        );
-
-    const nameField =
-        document.getElementById(
-            "nameField"
-        );
-
-    const nameInput =
-        document.getElementById(
-            "authName"
-        );
-
-
-    if (
-        !title ||
-        !subtitle ||
-        !submit ||
-        !switchText ||
-        !switchButton
-    ) {
-
+    if (!title || !subtitle || !submit || !switchText || !switchButton) {
         return;
-
     }
-
-
-    /* =====================================================
-       LOGIN MODE
-    ===================================================== */
 
     if (authMode === "login") {
+        title.textContent = "Welcome to JobNest";
+        subtitle.textContent = "Login to continue";
+        submit.textContent = "Login";
+        switchText.textContent = "Don't have an account?";
+        switchButton.textContent = "Sign Up";
 
-        title.textContent =
-            "Welcome to JobNest";
-
-
-        subtitle.textContent =
-            "Login to continue";
-
-
-        submit.textContent =
-            "Login";
-
-
-        switchText.textContent =
-            "Don't have an account?";
-
-
-        switchButton.textContent =
-            "Sign Up";
-
-
-        if (nameField) {
-
-            nameField.style.display =
-                "none";
-
-        }
-
-
+        if (nameField) nameField.style.display = "none";
         if (nameInput) {
-
-            nameInput.required =
-                false;
-
-            nameInput.value =
-                "";
-
+            nameInput.required = false;
+            nameInput.value = "";
         }
+    } else {
+        title.textContent = "Create your JobNest account";
+        subtitle.textContent = "Join thousands of job seekers";
+        submit.textContent = "Create Account";
+        switchText.textContent = "Already have an account?";
+        switchButton.textContent = "Login";
 
+        if (nameField) nameField.style.display = "block";
+        if (nameInput) nameInput.required = true;
     }
 
-
-    /* =====================================================
-       SIGN UP MODE
-    ===================================================== */
-
-    else {
-
-        title.textContent =
-            "Create your JobNest account";
-
-
-        subtitle.textContent =
-            "Join thousands of job seekers";
-
-
-        submit.textContent =
-            "Create Account";
-
-
-        switchText.textContent =
-            "Already have an account?";
-
-
-        switchButton.textContent =
-            "Login";
-
-
-        if (nameField) {
-
-            nameField.style.display =
-                "block";
-
-        }
-
-
-        if (nameInput) {
-
-            nameInput.required =
-                true;
-
-        }
-
+    if (passwordInput) {
+        passwordInput.minLength = authMode === "signup" ? 10 : 1;
     }
-
 }
-
 
 /* =========================================================
-   HANDLE LOGIN / SIGN UP
+   HANDLE LOGIN / SIGNUP
 ========================================================= */
 
-function handleAuth(event) {
-
+async function handleAuth(event) {
     event.preventDefault();
 
+    const emailInput = document.getElementById("authEmail");
+    const passwordInput = document.getElementById("authPassword");
+    const nameInput = document.getElementById("authName");
+    const submitButton = document.getElementById("authSubmit");
 
-    const emailInput =
-        document.getElementById(
-            "authEmail"
-        );
+    if (!emailInput || !passwordInput) return;
 
-    const passwordInput =
-        document.getElementById(
-            "authPassword"
-        );
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
 
-
-    if (!emailInput || !passwordInput) {
-
-        return;
-
-    }
-
-
-    const email =
-        emailInput.value
-            .trim()
-            .toLowerCase();
-
-
-    const password =
-        passwordInput.value;
-
-
-    /* =====================================================
-       SIGN UP
-    ===================================================== */
+    let endpoint;
+    let payload;
 
     if (authMode === "signup") {
+        const name = nameInput?.value.trim() || "";
 
-        const nameInput =
-            document.getElementById(
-                "authName"
-            );
-
-
-        const name =
-            nameInput
-                ? nameInput.value.trim()
-                : "";
-
-
-        if (!name) {
-
-            alert(
-                "Please enter your full name."
-            );
-
+        if (!name || !email || !password) {
+            alert("Please complete all required fields.");
             return;
-
         }
 
-
-        if (!email) {
-
-            alert(
-                "Please enter your email."
-            );
-
+        if (password.length < 10) {
+            alert("Your password must contain at least 10 characters.");
             return;
-
         }
 
-
-        if (password.length < 6) {
-
-            alert(
-                "Password must contain at least 6 characters."
-            );
-
+        endpoint = "/api/auth/register";
+        payload = { name, email, password };
+    } else {
+        if (!email || !password) {
+            alert("Please enter your email and password.");
             return;
-
         }
 
+        endpoint = "/api/auth/login";
+        payload = { email, password };
+    }
 
-        const users =
-            getUsers();
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Please wait...";
+    }
 
+    try {
+        const data = await apiRequest(endpoint, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
 
-        const existingUser =
-            users.find(
-                user =>
-                    user.email === email
-            );
-
-
-        if (existingUser) {
-
-            alert(
-                "An account with this email already exists. Please login."
-            );
-
-
-            authMode =
-                "login";
-
-
-            updateAuthModal();
-
-
-            return;
-
+        if (!data.token || !data.user) {
+            throw new Error("The server did not return the expected login details.");
         }
 
+        localStorage.setItem(AUTH_TOKEN_KEY, data.token);
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(data.user));
 
-        const newUser = {
-
-            id:
-                Date.now(),
-
-            name:
-                name,
-
-            email:
-                email,
-
-            password:
-                password,
-
-            role:
-                "Job Seeker",
-
-            createdAt:
-                new Date().toLocaleDateString()
-
-        };
-
-
-        users.push(
-            newUser
-        );
-
-
-        saveUsers(
-            users
-        );
-
-
-        /*
-           Automatically login the new user.
-        */
-
-        localStorage.setItem(
-            "jobnest_current_user",
-            JSON.stringify(newUser)
-        );
-
-
-        alert(
-            "Account created successfully!"
-        );
-
+        alert(authMode === "signup"
+            ? "Account created successfully!"
+            : "Login successful!");
 
         closeModal();
-
-
         event.target.reset();
-
-
+        updateAuthModal();
         updateNavbar();
 
+        // If the user applied for a job before logging in,
+        // continue to the registration/application page.
+        const selectedJob = localStorage.getItem("selected_job");
 
-        return;
-
+        if (selectedJob && window.location.pathname.endsWith("registration.html")) {
+            window.location.reload();
+        }
+    } catch (error) {
+        alert(error.message || "Unable to connect to JobNest. Please try again.");
+    } finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+            updateAuthModal();
+        }
     }
-
-
-    /* =====================================================
-       LOGIN
-    ===================================================== */
-
-    const users =
-        getUsers();
-
-
-    const user =
-        users.find(
-            storedUser =>
-                storedUser.email === email &&
-                storedUser.password === password
-        );
-
-
-    if (!user) {
-
-        alert(
-            "Invalid email or password."
-        );
-
-        return;
-
-    }
-
-
-    localStorage.setItem(
-        "jobnest_current_user",
-        JSON.stringify(user)
-    );
-
-
-    alert(
-        "Login successful!"
-    );
-
-
-    closeModal();
-
-
-    event.target.reset();
-
-
-    updateNavbar();
-
 }
+
+/* =========================================================
+   REFRESH AUTHENTICATED USER FROM BACKEND
+========================================================= */
+
+async function refreshCurrentUser() {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+
+    if (!token) {
+        localStorage.removeItem(AUTH_USER_KEY);
+        updateNavbar();
+        return null;
+    }
+
+    try {
+        const data = await apiRequest("/api/auth/me");
+        const user = data.user;
+
+        if (!user) {
+            throw new Error("User session is invalid.");
+        }
+
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+        updateNavbar();
+        return user;
+    } catch (error) {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_USER_KEY);
+        updateNavbar();
+        return null;
+    }
+}
+
+/* =========================================================
+   INITIAL AUTH MODAL SETUP
+========================================================= */
+
+function initializeAuthModal() {
+    const modal = document.getElementById("authModal");
+
+    if (!modal) return;
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) closeModal();
+    });
+
+    updateAuthModal();
+}
+
+/* =========================================================
+   INITIAL ACCOUNT MODAL SETUP
+========================================================= */
+
+function initializeAccountModal() {
+    const modal = document.getElementById("accountModal");
+
+    if (!modal) return;
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) closeAccount();
+    });
+}
+
 
 
 /* =========================================================
@@ -1401,37 +1123,32 @@ function closeAccount() {
    LOGOUT
 ========================================================= */
 
+
 function logoutUser() {
 
-    const confirmLogout =
-        confirm(
-            "Are you sure you want to logout?"
-        );
-
+    const confirmLogout = confirm(
+        "Are you sure you want to logout?"
+    );
 
     if (!confirmLogout) {
-
         return;
-
     }
 
+    // Remove the backend authentication token
+    localStorage.removeItem("jobnest_token");
 
-    localStorage.removeItem(
-        "jobnest_current_user"
-    );
+    // Remove the saved user information
+    localStorage.removeItem("jobnest_current_user");
 
-
+    // Close the account modal
     closeAccount();
 
-
+    // Update the navbar
     updateNavbar();
 
-
-    alert(
-        "You have been logged out successfully."
-    );
-
+    alert("You have been logged out successfully.");
 }
+
 
 
 /* =========================================================
@@ -1601,50 +1318,16 @@ function openAdminPortal() {
    INITIALIZE WEBSITE
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    initializeJobs();
+    initializeLocationSearch();
+    initializeAuthModal();
+    initializeAccountModal();
+    initializeSearchKeyboard();
+    initializeOutsideClick();
 
-        initializeJobs();
+    await refreshCurrentUser();
 
-        initializeLocationSearch();
-
-        initializeAuthModal();
-
-        initializeAccountModal();
-
-        initializeSearchKeyboard();
-
-        initializeOutsideClick();
-
-        displayFeaturedJobs();
-
-        updateNavbar();
-
-    }
-);
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        initializeJobs();
-
-        initializeLocationSearch();
-
-        initializeAuthModal();
-
-        initializeAccountModal();
-
-        initializeSearchKeyboard();
-
-        initializeOutsideClick();
-
-        displayFeaturedJobs();
-
-        /*
-           Check login status whenever page loads
-        */
-        updateNavbar();
-
-    }
-);
+    displayFeaturedJobs();
+    updateNavbar();
+});
