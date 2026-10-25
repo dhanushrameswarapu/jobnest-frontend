@@ -996,7 +996,14 @@
                             required>
 
                     </div>
-
+<div class="admin-form-group admin-form-full">
+    <label for="jobDescription">Job Description</label>
+    <textarea
+        id="jobDescription"
+        rows="5"
+        placeholder="Describe the role, responsibilities, and required skills..."
+        required></textarea>
+</div>
 
                     <div class="admin-form-group">
 
@@ -1368,15 +1375,10 @@ async function adminLogin() {
 ========================================================= */
 
 function adminLogout() {
-
-    localStorage.removeItem(
-        "jobnest_admin"
-    );
-
+    localStorage.removeItem("jobnest_admin_token");
+    localStorage.removeItem("jobnest_admin");
     location.reload();
-
 }
-
 
 /* =========================================================
    SHOW SECTION
@@ -1482,91 +1484,62 @@ function getData(
    DASHBOARD DATA
 ========================================================= */
 
-function loadAdminData() {
+/* =========================================
+   LOAD ADMIN DATA
+========================================= */
 
-    const jobs =
-        getData(
-            "jobnest_jobs"
-        );
+async function loadAdminData() {
+    const token = localStorage.getItem("jobnest_admin_token");
 
+    if (!token) {
+        return;
+    }
 
-    const users =
-        getData(
-            "jobnest_users",
-            [
-                {
-                    id: 1,
-                    name: "Demo User",
-                    email: "user@example.com",
-                    role: "Job Seeker"
-                }
-            ]
-        );
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/analytics`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
+        const data = await response.json();
 
-    const companies =
-        getData(
-            "jobnest_companies",
-            [
-                {
-                    id: 1,
-                    name: "Google",
-                    status: "Active"
-                },
-                {
-                    id: 2,
-                    name: "Amazon",
-                    status: "Active"
-                },
-                {
-                    id: 3,
-                    name: "Microsoft",
-                    status: "Active"
-                }
-            ]
-        );
+        if (!response.ok) {
+            throw new Error(data.message || "Could not load admin data.");
+        }
 
+        // Load the actual jobs from MongoDB.
+        const jobsResponse = await fetch(`${API_BASE_URL}/api/jobs`);
 
-    const applications =
-        getData(
-            "jobnest_applications"
-        );
+        const jobsData = await jobsResponse.json();
 
+        if (!jobsResponse.ok) {
+            throw new Error("Could not load jobs from the backend.");
+        }
 
-    document.getElementById(
-        "totalJobs"
-    ).textContent =
-        jobs.length;
+        const jobs = jobsData.jobs || [];
 
+        // Keep existing demo data for these sections for now.
+        const users = getData("jobnest_users", []);
+        const companies = getData("jobnest_companies", []);
+        const applications = getData("jobnest_applications", []);
 
-    document.getElementById(
-        "totalUsers"
-    ).textContent =
-        users.length;
+        document.getElementById("totalJobs").textContent = data.jobs ?? jobs.length;
+        document.getElementById("totalUsers").textContent = data.users ?? users.length;
+        document.getElementById("totalCompanies").textContent =
+            data.companies ?? companies.length;
+        document.getElementById("totalApplications").textContent =
+            data.applications ?? applications.length;
 
+        renderJobs(jobs);
+        renderUsers(users);
+        renderCompanies(companies);
+        renderApplications(applications);
 
-    document.getElementById(
-        "totalCompanies"
-    ).textContent =
-        companies.length;
-
-
-    document.getElementById(
-        "totalApplications"
-    ).textContent =
-        applications.length;
-
-
-    renderJobs(jobs);
-
-    renderUsers(users);
-
-    renderCompanies(companies);
-
-    renderApplications(
-        applications
-    );
-
+    } catch (error) {
+        console.error("Admin dashboard error:", error);
+        alert(error.message || "Could not load admin data.");
+    }
 }
 
 
@@ -1574,128 +1547,64 @@ function loadAdminData() {
    ADD JOB
 ========================================================= */
 
-function addJob(event) {
+/* =========================================
+   ADD JOB — SAVE TO MONGODB
+========================================= */
 
+async function addJob(event) {
     event.preventDefault();
 
+    const token = localStorage.getItem("jobnest_admin_token");
 
-    const jobs =
-        getData(
-            "jobnest_jobs"
-        );
+    if (!token) {
+        alert("Your admin session has expired. Please log in again.");
+        return;
+    }
 
+    const job = {
+        company: document.getElementById("jobCompany").value.trim(),
+        title: document.getElementById("jobTitle").value.trim(),
+        location: document.getElementById("jobLocation").value.trim(),
+        category: document.getElementById("jobCategoryAdmin").value,
+        salary: document.getElementById("jobSalary").value.trim(),
+        type: document.getElementById("jobType").value,
+        mode: document.getElementById("jobMode").value,
+        logo: document.getElementById("jobLogo").value.trim(),
+        description: document.getElementById("jobDescription").value.trim()
+    };
 
-    const company =
-        document
-            .getElementById(
-                "jobCompany"
-            )
-            .value
-            .trim();
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/jobs`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(job)
+        });
 
+        const data = await response.json();
 
-    const title =
-        document
-            .getElementById(
-                "jobTitle"
-            )
-            .value
-            .trim();
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                throw new Error(
+                    data.message || "Admin authentication failed. Log in again."
+                );
+            }
 
+            throw new Error(data.message || "Could not save the job.");
+        }
 
-    const location =
-        document
-            .getElementById(
-                "jobLocation"
-            )
-            .value
-            .trim();
+        event.target.reset();
 
+        alert("Job added successfully and saved to MongoDB!");
 
-    const category =
-        document
-            .getElementById(
-                "jobCategoryAdmin"
-            )
-            .value;
+        await loadAdminData();
 
-
-    const salary =
-        document
-            .getElementById(
-                "jobSalary"
-            )
-            .value
-            .trim();
-
-
-    const type =
-        document
-            .getElementById(
-                "jobType"
-            )
-            .value;
-
-
-    const mode =
-        document
-            .getElementById(
-                "jobMode"
-            )
-            .value;
-
-
-    const logo =
-        document
-            .getElementById(
-                "jobLogo"
-            )
-            .value
-            .trim() ||
-        company.charAt(0);
-
-
-    jobs.push({
-
-        id: Date.now(),
-
-        company,
-
-        title,
-
-        location,
-
-        category,
-
-        salary,
-
-        type,
-
-        mode,
-
-        logo,
-
-        logoClass: ""
-
-    });
-
-
-    localStorage.setItem(
-        "jobnest_jobs",
-        JSON.stringify(jobs)
-    );
-
-
-    event.target.reset();
-
-
-    alert(
-        "Job added successfully!"
-    );
-
-
-    loadAdminData();
-
+    } catch (error) {
+        console.error("Add job error:", error);
+        alert(error.message || "Could not connect to the backend.");
+    }
 }
 
 
@@ -1703,124 +1612,107 @@ function addJob(event) {
    RENDER JOBS
 ========================================================= */
 
+/* =========================================
+   RENDER MONGODB JOBS
+========================================= */
+
 function renderJobs(jobs) {
+    const container = document.getElementById("jobsTable");
 
-    const container =
-        document.getElementById(
-            "jobsTable"
-        );
-
-
-    if (jobs.length === 0) {
-
-        container.innerHTML =
-            "<p>No jobs found.</p>";
-
+    if (!jobs || jobs.length === 0) {
+        container.innerHTML = "<p>No jobs found.</p>";
         return;
-
     }
 
-
     container.innerHTML = `
-
         <table class="admin-table">
-
             <thead>
-
                 <tr>
-
                     <th>Company</th>
                     <th>Job</th>
                     <th>Location</th>
                     <th>Category</th>
                     <th>Action</th>
-
                 </tr>
-
             </thead>
 
             <tbody>
-
                 ${jobs.map(job => `
-
                     <tr>
-
+                        <td>${escapeAdminText(job.company)}</td>
+                        <td>${escapeAdminText(job.title)}</td>
+                        <td>${escapeAdminText(job.location)}</td>
+                        <td>${escapeAdminText(job.category || "Other")}</td>
                         <td>
-                            ${job.company}
-                        </td>
-
-                        <td>
-                            ${job.title}
-                        </td>
-
-                        <td>
-                            ${job.location}
-                        </td>
-
-                        <td>
-                            ${job.category}
-                        </td>
-
-                        <td>
-
                             <button
                                 class="delete-btn"
-                                onclick="deleteJob(${job.id})">
-
+                                onclick="deleteJob('${job._id}')">
                                 <i class="fa-solid fa-trash"></i>
-
                                 Delete
-
                             </button>
-
                         </td>
-
                     </tr>
-
                 `).join("")}
-
             </tbody>
-
         </table>
-
     `;
-
 }
 
+function escapeAdminText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
 
 /* =========================================================
    DELETE JOB
 ========================================================= */
 
-function deleteJob(id) {
+/* =========================================
+   DELETE JOB — UPDATE MONGODB
+========================================= */
 
-    if (
-        !confirm(
-            "Delete this job?"
-        )
-    ) return;
+async function deleteJob(id) {
+    if (!confirm("Remove this job from the public Jobs page?")) {
+        return;
+    }
 
+    const token = localStorage.getItem("jobnest_admin_token");
 
-    let jobs =
-        getData(
-            "jobnest_jobs"
+    if (!token) {
+        alert("Please log in to the admin portal again.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/admin/jobs/${encodeURIComponent(id)}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
         );
 
+        const data = await response.json();
 
-    jobs =
-        jobs.filter(
-            job => job.id !== id
-        );
+        if (!response.ok) {
+            throw new Error(data.message || "Could not remove this job.");
+        }
 
+        alert("Job removed from the public listings.");
 
-    localStorage.setItem(
-        "jobnest_jobs",
-        JSON.stringify(jobs)
-    );
+        await loadAdminData();
 
-
-    loadAdminData();
-
+    } catch (error) {
+        console.error("Delete job error:", error);
+        alert(error.message || "Could not delete the job.");
+    }
 }
 
 
