@@ -1162,23 +1162,16 @@ function filterJobs() {
 ===================================================== */
 
 function applyForJob(jobId) {
-    const selectedJob = allJobs.find(
-        job => String(job._id || job.id) === String(jobId)
-    );
+    const token = localStorage.getItem("jobnestToken");
 
-    if (!selectedJob) {
-        alert("Job not found. Please refresh the page and try again.");
+    if (!token) {
+        alert("Please log in to apply for this job.");
+        window.location.href = "registration.html?mode=login";
         return;
     }
 
-    localStorage.setItem(
-        "selected_job",
-        JSON.stringify(selectedJob)
-    );
-
-    window.location.href = "registration.html";
+    // Keep your existing application-form code below.
 }
-
 
 /* =====================================================
    LOAD JOBS WHEN PAGE OPENS
